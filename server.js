@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const config = require('./config');
+const db = require('./db');
 
 // Enabled body
 app.use(express.json());
@@ -23,6 +24,11 @@ app.use((err, _req, res, _next) => {
 
 });
 
-app.listen(config.PORT, () => {
-  console.log("Node server listening on port 3000");
+db.connectDB
+.then(() => {
+  console.log("Conextion to database.");
+  app.listen(config.PORT, () => {
+    console.log("Node server listening on port 3000");
+  });
+
 });
