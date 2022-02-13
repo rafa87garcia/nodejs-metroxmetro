@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const config = require('./config');
 
+app.get('/', (req, res) => res.status(200).send("Server running"));
+
 
 app.use('*', (req, res, next) => {
   const error = new Error('Ruta no encotrada');
