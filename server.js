@@ -3,12 +3,15 @@ const app = express();
 const config = require('./config');
 const db = require('./db');
 
+const landRouter = require('./Routers/land.router');
+
 // Enabled body
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => res.status(200).send("Server running"));
 
+app.use('/land', landRouter);
 
 app.use('*', (req, res, next) => {
   const error = new Error('Ruta no encotrada');

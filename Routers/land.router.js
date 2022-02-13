@@ -1,5 +1,5 @@
 const express = require('express');
-const Land = require('../models/Land');
+const Land = require('../Models/Land');
 
 // const auth = require('../middleware/auth.middleware');
 
@@ -53,7 +53,7 @@ router.post('/', (req, res, next) => {
 
 router.put('/:id', (req, res, next) => {
     const id = req.params.id;
-    
+
     Land.findOneAndUpdate(id, { $set: req.body }, { new: true })
         .then((land) => {
             return res.status(200).json(land);
