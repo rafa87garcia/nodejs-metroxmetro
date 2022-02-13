@@ -26,7 +26,7 @@ app.use((err, _req, res, _next) => {
 
 db.connectDB
 .then(() => {
-  console.log("Conextion to database.");
+  console.log("Conection to database.");
   app.listen(config.PORT, () => {
     console.log("Node server listening on port 3000");
   });
