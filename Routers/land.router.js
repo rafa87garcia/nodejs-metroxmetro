@@ -37,7 +37,7 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-    const newLand = new Movie(req.body);
+    const newLand = new Land(req.body);
 
     return newLand.save()
         .then(() => {
