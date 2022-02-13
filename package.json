@@ -1,0 +1,22 @@
+{
+  "name": "nodejs-metroxmetro",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafa87garcia/nodejs-metroxmetro.git"
+  },
+  "author": "Rafael Garcia Rea",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rafa87garcia/nodejs-metroxmetro/issues"
+  },
+  "homepage": "https://github.com/rafa87garcia/nodejs-metroxmetro#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
