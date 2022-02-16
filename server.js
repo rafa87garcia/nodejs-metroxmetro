@@ -1,7 +1,11 @@
-const express = require('express');
-const app = express();
 const config = require('./config');
+const express = require('express');
 const db = require('./db');
+const passport = require('passport');
+const app = express();
+const auth = require('./middlewares/auth.middleware');
+
+app.set('jwt-secret', config.JWT_SECRET);
 
 const landRouter = require('./Routers/land.router');
 const userRouter = require('./Routers/user.router');
@@ -9,6 +13,9 @@ const userRouter = require('./Routers/user.router');
 // Enabled body
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Añadimos el middleware de passport a express
+app.use(passport.initialize());
 
 app.get('/', (req, res) => res.status(200).send("Server running"));
 
