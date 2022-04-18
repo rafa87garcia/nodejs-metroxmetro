@@ -11,13 +11,12 @@ router.post('/register', (req, res, next) => {
       console.log("Error al entrar al registro", error);
       return next(error);
     }
-
     req.logIn(user, (errorLogin => {
       if (errorLogin) {
-        return next(errorLogin);
+        next(errorLogin);
       }
-      res.status(201).json(user);
     }));
+    res.status(201).json(user);
   }
 
   passport.authenticate('register', callback)(req);
@@ -30,13 +29,12 @@ router.post('/login', (req, res, next) => {
       return next(error);
     }
 
-    req.logIn(user, (errorLogin => {
-      if (errorLogin) {
-        return next(errorLogin);
+    req.logIn(user, (error) => {
+      if (error) {
+        return next(error);
       }
-      const token = new signIn(user, req.app.get('jwt-secret'));
-      res.status(201).json({ userId: user._id, token });
-    }));
+      res.status(200).json(user);
+    });
   }
 
   passport.authenticate('login', callback)(req);

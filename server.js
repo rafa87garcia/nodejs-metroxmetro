@@ -1,11 +1,16 @@
 const config = require('./config');
+
 const express = require('express');
 const db = require('./db');
-const passport = require('passport');
-const app = express();
-const auth = require('./middlewares/auth.middleware');
 
-app.set('jwt-secret', config.JWT_SECRET);
+const passport = require('passport');
+require('./authentication/passport');
+
+//const auth = require('./middlewares/auth.middleware');
+
+const app = express();
+
+// app.set('jwt-secret', config.JWT_SECRET);
 
 const landRouter = require('./Routers/land.router');
 const userRouter = require('./Routers/user.router');
@@ -17,10 +22,10 @@ app.use(express.urlencoded({ extended: false }));
 // Añadimos el middleware de passport a express
 app.use(passport.initialize());
 
-app.get('/', (req, res) => res.status(200).send("Server running"));
+app.get('/', (_req, res) => res.status(200).send("Server running"));
 
 app.use('/land', landRouter);
-app.use('/user', userRouter);
+app.use('/users', userRouter);
 
 app.use('*', (req, res, next) => {
   const error = new Error('Ruta no encotrada');

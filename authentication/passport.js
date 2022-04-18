@@ -8,11 +8,12 @@ const LocalStrategy = passportLocal.Strategy;
 const SKIP = 15;
 passport.use(
   'register',
-  new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password',
-    passReqToCallback: true,
-  },
+  new LocalStrategy(
+    {
+      usernameField: 'email',
+      passwordField: 'password',
+      passReqToCallback: true,
+    },
     async (req, username, password, done) => {
       try {
         const userCurrent = await User.findOne({ email: username });
@@ -20,7 +21,6 @@ passport.use(
           const error = new Error("User exist");
           done(error);
         }
-
         const passEncry = await bcrypt.hash(password, SKIP);
 
         const newUser = new User({
@@ -33,10 +33,10 @@ passport.use(
         userSave.password = undefined;
         done(null, userSave);
       } catch (error) {
-        done(error);
+        return done(error);
       }
-    })
-);
+    }
+  ));
 
 passport.use(
   'login',
@@ -45,29 +45,32 @@ passport.use(
     passwordField: 'password',
     passReqToCallback: true,
   },
-  async (req, username, password, done) => {
-    try {
-      const user = await User.findOne({ email: username });
+    async (req, username, password, done) => {
+      try {
+        const currentUser = await User.findOne({ email: username });
 
-      // 2. Si el usuario no existe fallamos (porque no puede logearse nadie que no esté registrado)
-      if (!user) {
+        // 2. Si el usuario no existe fallamos (porque no puede logearse nadie que no esté registrado)
+        if (!currentUser) {
           const error = new Error('User not register');
           return done(error);
-      }
+        }
 
-      const passValid = await bcrypt.compare(password, user.password);
+        const passValid = await bcrypt.compare(
+          password,
+          currentUser.password
+        );
 
-      if (!passValid) {
-          const error = new Error('Contraseña incorrecta');
+        if (!passValid) {
+          const error = new Error('The email & password combination is incorrect!');
           return done(error);
-      }
+        }
 
-      user.password = undefined;
-      return done(null, user);
-  } catch(error) {
-      return done(error);
-  }
-  })
+        currentUser.password = undefined;
+        return done(null, currentUser);
+      } catch (error) {
+        return done(error);
+      }
+    })
 );
 passport.serializeUser((user, done) => {
   return done(null, user._id);
