@@ -1,7 +1,8 @@
 const passport = require('passport');
 const passportLocal = require('passport-local');
-const User = require('../Models/User');
 const bcrypt = require('bcrypt');
+
+const User = require('../Models/User');
 
 const LocalStrategy = passportLocal.Strategy;
 
@@ -45,7 +46,7 @@ passport.use(
     passwordField: 'password',
     passReqToCallback: true,
   },
-    async (req, username, password, done) => {
+    async (_req, username, password, done) => {
       try {
         const currentUser = await User.findOne({ email: username });
 
