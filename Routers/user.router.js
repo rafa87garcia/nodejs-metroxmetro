@@ -1,10 +1,18 @@
 const express = require('express');
+const { check, validationResult } = require('express-validator');
 const passport = require('passport');
 const { signIn } = require('../authentication/jsonwebtoken');
+const config = require('../config');
+const auth = require('../middlewares/auth.middleware');
+const { validateField } = require('../middlewares/validateFields.middleware');
 
-const router = express.Router();
 
-router.post('/register', (req, res, next) => {
+const userRouter = express.Router();
+
+userRouter.post('/register', [
+  check('email', 'El correo no es valido').isEmail(), // Validación del correo valido.
+  validateField,
+], (req, res, next) => {
 
   const callback = (error, user) => {
     if (error) {
@@ -22,31 +30,27 @@ router.post('/register', (req, res, next) => {
   passport.authenticate('register', callback)(req);
 });
 
-router.post('/login', (req, res, next) => {
+userRouter.post('/login', (req, res, next) => {
   const callback = (error, user) => {
     if (error) {
       console.log("Error al entrar al login", error);
       return next(error);
     }
-
-    req.logIn(user, (error) => {
-      if (error) {
-        return next(error);
-      }
-      res.status(200).json(user);
-    });
+    // Genero JWT de acceso.
+    const token = signIn(user, config.JWT_SECRET);
+    return res.status(200).json({ user: user, token });
   }
 
   passport.authenticate('login', callback)(req);
 });
 
-router.post('/logout', (req, res, next) => {
+userRouter.post('/logout', [
+  auth.isAuthenticated
+], (req, res, _next) => {
   if (!req.user) {
     return res.sendStatus(301);
   }
-  req.logOut();
-
   return res.status(200).json("User session close");
 });
 
-module.exports = router;
+module.exports = userRouter;

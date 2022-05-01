@@ -1,24 +1,31 @@
 const express = require('express');
+const roles = require('../middlewares/roles.middleware');
+const auth = require('../middlewares/auth.middleware');
 const Land = require('../Models/Land');
 
-// const auth = require('../middleware/auth.middleware');
+const landRouter = express.Router();
 
-const router = express.Router();
-
-router.get('/', (req, res, next) => {
+landRouter.get('/', [
+    auth.isAuthenticated,
+    roles.hasRoles('authenticate'),
+], (req, res, _next) => {
     let filter = {};
 
-    if (req.query.name) {
-        filter = { ...filter, name: { $regex: req.query.name } };
+    if (req.query.title) {
+        filter = { ...filter, name: { $regex: req.query.title } };
     }
-    console.log(filter);
     return Land.find(filter)
         .then(land => {
             return res.status(200).json(land);
         })
+        .catch((err) => {
+            const error = new Error(err);
+            error.status(500);
+            return error;
+        });
 });
 
-router.get('/:id', (req, res, next) => {
+landRouter.get('/:id', (req, res, next) => {
     const id = req.params.id;
     return Land.findById(id)
         .then(land => {
@@ -36,7 +43,7 @@ router.get('/:id', (req, res, next) => {
         });
 });
 
-router.post('/', (req, res, next) => {
+landRouter.post('/', (req, res, next) => {
     const newLand = new Land(req.body);
 
     return newLand.save()
@@ -50,7 +57,7 @@ router.post('/', (req, res, next) => {
         })
 });
 
-router.put('/:id', (req, res, next) => {
+landRouter.put('/:id', (req, res, next) => {
     const id = req.params.id;
 
     Land.findOneAndUpdate(id, { $set: req.body }, { new: true })
@@ -64,7 +71,7 @@ router.put('/:id', (req, res, next) => {
         })
 })
 
-router.delete('/:id', (req, res, next) => {
+landRouter.delete('/:id', (req, res, next) => {
     const id = req.params.id;
     Land.findByIdAndDelete(id)
         .then(() => {
@@ -77,4 +84,4 @@ router.delete('/:id', (req, res, next) => {
         })
 });
 
-module.exports = router;
+module.exports = landRouter;

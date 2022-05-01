@@ -5,7 +5,7 @@ const hasRoles = (...roles) => {
     const user = req.user;
     if (!user) {
       return res.status(501).json({
-        error: "dsadasdas",
+        error: "No tienes JWT generado",
       });
     }
     if (!roles.includes(user.role)) {
