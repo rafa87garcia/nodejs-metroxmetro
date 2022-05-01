@@ -6,7 +6,7 @@ const signIn = (user, secret) => {
       uid: user._id,
       name: user.name,
       email: user.email,
-      rol: user.rol,
+      role: user.role,
     },
     secret,
     { expiresIn: '1h' }
