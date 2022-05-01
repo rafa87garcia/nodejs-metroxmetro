@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('./config');
 
-const connectDB = mongoose.connect(config.URL_DB, {
+const connectDB = mongoose.connect(config.DB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
