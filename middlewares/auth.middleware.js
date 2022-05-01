@@ -1,8 +1,11 @@
 const jwt = require('jsonwebtoken');
+const config = require('../config');
+const User = require('../Models/User');
 
 const isAuthenticated = (req, res, next) => {
   const authorization = req.headers.authorization;
-
+  const user = req.user;
+  console.log(user);
   if (!authorization) {
     return res.status(401).json("No está autorizado");
   }
@@ -18,27 +21,22 @@ const isAuthenticated = (req, res, next) => {
   // const token = separados[1];
 
   try {
-    const tokenInfo = jwt.verify(token, req.app.get('jwt-secret'));
-    req.authority = {
-      uid: tokenInfo.uid,
-      email: tokenInfo.email,
-      rol: tokenInfo.rol,
-    };
+    const tokenInfo = jwt.verify(token, config.JWT_SECRET);
 
+    req.user = {
+      id: tokenInfo.uid,
+      name: tokenInfo.name,
+      email: tokenInfo.email,
+      role: tokenInfo.role,
+    };
+    
+    console.log(req.user);
     next();
   } catch (error) {
     return res.status(403).json(error);
   }
 };
 
-// const isAdmin = (req, res, next) => {
-//     if(req.user.role === 'ADMIN') {
-//         return next();
-//     }
-//     return res.status(403).json('Acceso prohibido')
-// }
-
 module.exports = {
   isAuthenticated,
-  // isAdmin,
 };
