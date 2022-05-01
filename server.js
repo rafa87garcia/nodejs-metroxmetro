@@ -1,11 +1,15 @@
 
 const express = require('express');
 const passport = require('passport');
+require('./authentication/passport')
 const config = require('./config');
 const landRouter = require('./Routers/land.router');
 const userRouter = require('./Routers/user.router');
+const favoriteRouter = require('./Routers/favorite.router');
+const propertyRouter = require('./Routers/property.router');
+const { isAuthenticated } = require('./middlewares/auth.middleware');
+
 const db = require('./db');
-require('./authentication/passport')
 
 const server = express();
 
@@ -21,6 +25,8 @@ server.get('/', (_req, res) => {
 });
 
 server.use('/lands', landRouter);
+server.use('/properties', propertyRouter);
+server.use('/favorites', favoriteRouter);
 server.use('/users', userRouter);
 
 server.use('*', (_req, _res, next) => {

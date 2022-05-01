@@ -1,14 +1,14 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, Types } = require('mongoose');
 
 
 const favoriteSchema = Schema({
     user: {
-        type: mongoose.Types.ObjectId,
+        type: Types.ObjectId,
         ref: 'User',
         require: true
     },
     land: {
-        type: mongoose.Types.ObjectId,
+        type: Types.ObjectId,
         ref: 'Land',
         require: true
     },

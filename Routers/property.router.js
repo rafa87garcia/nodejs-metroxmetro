@@ -22,7 +22,7 @@ landRouter.get('/', (req, res, _next) => {
         });
 });
 
-landRouter.get('/:id', (req, res, next) => {
+landRouter.get('/:id', auth.isAuthenticated, (req, res, next) => {
     const id = req.params.id;
     return Land.findById(id)
         .then(land => {
@@ -40,7 +40,7 @@ landRouter.get('/:id', (req, res, next) => {
         });
 });
 
-landRouter.post('/', auth.isAuthenticated, (req, res, next) => {
+landRouter.post('/', auth.isAuthenticated,(req, res, next) => {
     const newLand = new Land(req.body);
 
     return newLand.save()
@@ -54,7 +54,7 @@ landRouter.post('/', auth.isAuthenticated, (req, res, next) => {
         })
 });
 
-landRouter.put('/:id', auth.isAuthenticated, (req, res, next) => {
+landRouter.put('/:id', auth.isAuthenticated,(req, res, next) => {
     const id = req.params.id;
 
     Land.findOneAndUpdate(id, { $set: req.body }, { new: true })
@@ -68,7 +68,7 @@ landRouter.put('/:id', auth.isAuthenticated, (req, res, next) => {
         })
 })
 
-landRouter.delete('/:id', auth.isAuthenticated, (req, res, next) => {
+landRouter.delete('/:id', auth.isAuthenticated ,(req, res, next) => {
     const id = req.params.id;
     Land.findByIdAndDelete(id)
         .then(() => {

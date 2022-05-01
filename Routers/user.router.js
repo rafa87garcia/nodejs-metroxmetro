@@ -44,9 +44,7 @@ userRouter.post('/login', (req, res, next) => {
   passport.authenticate('login', callback)(req);
 });
 
-userRouter.post('/logout', [
-  auth.isAuthenticated
-], (req, res, _next) => {
+userRouter.post('/logout', (req, res, _next) => {
   if (!req.user) {
     return res.sendStatus(301);
   }
