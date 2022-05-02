@@ -1,9 +1,8 @@
 
+const config = require('./config');
 const express = require('express');
 const passport = require('passport');
 require('./authentication/passport')
-const config = require('./config');
-const landRouter = require('./Routers/land.router');
 const userRouter = require('./Routers/user.router');
 const favoriteRouter = require('./Routers/favorite.router');
 const propertyRouter = require('./Routers/property.router');
@@ -12,7 +11,7 @@ const { isAuthenticated } = require('./middlewares/auth.middleware');
 const db = require('./db');
 
 const server = express();
-
+const PORT = config.PORT;
 
 // Enabled body
 server.use(express.json());
@@ -24,7 +23,6 @@ server.get('/', (_req, res) => {
   res.status(200).send("Server running")
 });
 
-server.use('/lands', landRouter);
 server.use('/properties', propertyRouter);
 server.use('/favorites', favoriteRouter);
 server.use('/users', userRouter);
@@ -45,7 +43,7 @@ server.use((err, _req, res, _next) => {
 
 db.connectDB.then(() => {
   console.log("Conection to database.");
-  server.listen(config.PORT, () => {
-    console.log(`Node server listening on port ${config.PORT}`);
+  server.listen(PORT, () => {
+    console.log(`Node server listening on port ${PORT}`);
   });
 });
