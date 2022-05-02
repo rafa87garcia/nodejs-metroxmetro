@@ -4,8 +4,7 @@ const User = require('../Models/User');
 
 const isAuthenticated = (req, res, next) => {
   const authorization = req.headers.authorization;
-  const user = req.user;
-  console.log(user);
+
   if (!authorization) {
     return res.status(401).json("No está autorizado");
   }
@@ -29,8 +28,7 @@ const isAuthenticated = (req, res, next) => {
       email: tokenInfo.email,
       role: tokenInfo.role,
     };
-    
-    console.log(req.user);
+
     next();
   } catch (error) {
     return res.status(403).json(error);
